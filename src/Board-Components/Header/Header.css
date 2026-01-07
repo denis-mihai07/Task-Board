@@ -120,19 +120,22 @@
   flex-direction: column;
 }
 
+.big {
+  height: 40rem;
+}
+
 .bgMenu_header {
-  height: 20%;
+  height: 5rem;
   width: 100%;
   padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* border: 2px solid red; */
 }
 .bgMenu_home {
   height: 80%;
   width: 100%;
-  border: 2px solid red;
+  flex-grow: 1;
 }
 
 .bgMenu_button {
@@ -144,7 +147,6 @@
   border-radius: 0.2rem;
   transition: all 0.2s ease;
   cursor: pointer;
-  /* border: 2px solid red; */
 }
 
 .bgMenu_button:hover {
@@ -224,6 +226,32 @@
   padding: 1rem;
 
   /* border: 2px solid red; */
+}
+
+.bgMenu_pictures {
+  height: 35rem;
+  width: 100%;
+  /* border: 2px solid red; */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 0.5rem;
+}
+
+.photo_image {
+  height: 5rem;
+  width: 100%;
+  /* margin: 0.4rem; */
+  overflow: hidden;
+  border-radius: 0.5rem;
+
+  /* border: 2px solid red; */
+}
+
+.photo_image img {
+  height: 100%;
+  width: 100%;
 }
 
 @media (max-width: 1300px) {

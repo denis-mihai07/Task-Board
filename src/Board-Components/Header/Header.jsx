@@ -1,21 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Header.css";
 import {
   MagnifyingGlassIcon,
   SelectionBackgroundIcon,
   XIcon,
   ArrowBendUpLeftIcon,
+  CheckIcon,
+  SpinnerIcon,
 } from "@phosphor-icons/react";
 import Picture from "./default_picture.jpg";
 
 const unsplashFetchURL =
-  "https://api.unsplash.com/photos/random?count=10&client_id=OHIYPwO7PbAph1p5sa6rM3E1hK5LmG-I8IugGOMU-O0";
-
-const Banner = () => {
+  "https://api.unsplash.com/photos/random?count=30&orientation=landscape&query=wallpaper,landscape,background&client_id=OHIYPwO7PbAph1p5sa6rM3E1hK5LmG-I8IugGOMU-O0";
+const Banner = ({ setBackground }) => {
   const [searchValue, setSearchValue] = useState("");
+
   const [bgMenu, setBgMenu] = useState("");
+  const bgMenuFirstApp = useRef(false);
+
   const [photos, setPhotos] = useState([]);
-  const [background, setBackground] = useState(null);
+  const [selectedID, setSelectedID] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [colors, setColors] = useState([
+    "to right, #43cea2, #185a9d",
+    "to right, #83a4d4, #b6fbff",
+    "to right, #70e1f5, #ffd194",
+    "to right, #6441a5, #2a0845",
+    "to right, #780206, #061161",
+    "to right, #fbd3e9, #bb377d",
+    "to right, #606c88, #3f4c6b",
+    "to right, #c9ffbf, #ffafbd",
+    "to right, #b993d6, #8ca6db",
+    "to right, #870000, #190a05",
+    "to right, #00d2ff, #3a7bd5",
+    "to right, #f2709c, #ff9472",
+  ]);
+  const [cooldown, setCooldown] = useState(false);
 
   const handleSearch = (e) => {
     if (e.key == "Enter") {
@@ -32,26 +52,41 @@ const Banner = () => {
   };
 
   const handleChangeBackground = (src) => {
-    setBackground(src);
+    setIsLoading(true);
+    setCooldown(true);
+    setTimeout(() => {
+      setCooldown(false);
+    }, 2100);
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      setBackground(src);
+      setIsLoading(false);
+    };
   };
 
   const fetchPhotos = async () => {
-    const res = await fetch(
-      "https://api.pexels.com/v1/curated?per_page=100&query=landscape",
-      {
-        headers: {
-          Authorization:
-            "18GWqIrUwAJSFlXqDk0Cpnz7VleRTd5UvcMETL5dhW5JvMQX62QLr2G1",
-        },
-      }
-    );
+    // const res = await fetch(
+    //   "https://api.pexels.com/v1/curated?per_page=100&query=landscape",
+    //   {
+    //     headers: {
+    //       Authorization:
+    //         "18GWqIrUwAJSFlXqDk0Cpnz7VleRTd5UvcMETL5dhW5JvMQX62QLr2G1",
+    //     },
+    //   }
+    // );
+    const res = await fetch(unsplashFetchURL);
     const data = await res.json();
-    setPhotos(data.photos);
+    setPhotos(data);
+    console.info("Unsplash API has been fetched.");
   };
 
   useEffect(() => {
-    fetchPhotos();
-  }, []);
+    if (bgMenu && !bgMenuFirstApp.current) {
+      fetchPhotos();
+      bgMenuFirstApp.current = true;
+    }
+  }, [bgMenu]);
 
   return (
     <>
@@ -84,7 +119,7 @@ const Banner = () => {
           {bgMenu && (
             <div
               className={`bgMenu_container ${
-                bgMenu == "Pictures" ? "big" : ""
+                bgMenu == "Pictures" || bgMenu == "Colors" ? "big" : ""
               }`}
             >
               <div className="bgMenu_header">
@@ -99,7 +134,10 @@ const Banner = () => {
                   </div>
                 )}
                 {bgMenu == "Home" && (
-                  <div className="bgMenu_button" style={{ opacity: 0 }}></div>
+                  <div
+                    className="bgMenu_button"
+                    style={{ opacity: 0, cursor: "default" }}
+                  ></div>
                 )}
 
                 {bgMenu == "Home" && (
@@ -149,11 +187,45 @@ const Banner = () => {
                 <div className="bgMenu_pictures">
                   {photos.map((val) => (
                     <div
-                      className="photo_image"
+                      className={`photo_image 
+                          ${val.id == selectedID ? "selected" : ""}
+                          ${isLoading ? "rotating" : ""}
+                        `}
                       key={val.id}
-                      onClick={() => handleChangeBackground(val.src.original)}
+                      onClick={() => {
+                        if (!cooldown) {
+                          handleChangeBackground(val.urls.full);
+                          setSelectedID(val.id);
+                        }
+                      }}
                     >
-                      <img src={val.src.medium} alt="pula"></img>
+                      {val.id == selectedID && !isLoading && <CheckIcon />}
+                      {val.id == selectedID && isLoading && <SpinnerIcon />}
+                      <img
+                        src={val.urls.thumb}
+                        alt="Landscape Background Picture"
+                      ></img>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {bgMenu == "Colors" && (
+                <div className="bgMenu_pictures">
+                  {colors.map((val, id) => (
+                    <div
+                      className={`photo_image ${
+                        id == selectedID ? "selected" : ""
+                      }`}
+                      style={{ background: `linear-gradient(${val})` }}
+                      key={id}
+                      onClick={() => {
+                        if (!cooldown) {
+                          setBackground(val);
+                          setSelectedID(id);
+                        }
+                      }}
+                    >
+                      {id == selectedID && <CheckIcon />}
                     </div>
                   ))}
                 </div>
@@ -162,28 +234,14 @@ const Banner = () => {
           )}
         </div>
       </div>
-      <div
-        className="main-bg"
-        style={{
-          backgroundImage: `url(${background})`,
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          zIndex: -1,
-        }}
-      ></div>
     </>
   );
 };
 
-const Header = () => {
+const Header = ({ setBackground }) => {
   return (
     <>
-      <Banner />
+      <Banner setBackground={setBackground} />
     </>
   );
 };

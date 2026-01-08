@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Header from "./Board-Components/Header/Header.jsx";
+import Background from "./Board-Components/Background/Background.jsx";
 
 const Board = () => {
-  const [count, setCount] = useState(0);
+  const [bgUrl, setBgUrl] = useState(null);
 
   return (
     <>
-      <Header />
+      <Header setBackground={setBgUrl} />
+      <Background bgUrl={bgUrl} />
     </>
   );
 };

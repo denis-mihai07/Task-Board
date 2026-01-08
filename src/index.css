@@ -1,5 +1,5 @@
 :root {
-  --banner-color: #700570;
+  --banner-color: #0000006b;
 }
 
 *,
@@ -12,6 +12,8 @@
 
 html {
   scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -55,4 +57,39 @@ ol {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #d8d8d8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #949394;
+  border-radius: 5%;
+}
+
+/* ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cf7070;
+  border-radius: 5%;
+} */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a95555;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #7d3f3f;
 }

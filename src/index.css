@@ -74,24 +74,10 @@ a {
   border-radius: 5rem;
 }
 
-/* ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #ffffff;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cf7070;
-  border-radius: 5%;
-} */
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #a95555;
+  background: #dad9d9c5;
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: #7d3f3f;
+  background: #c9c9c9c5;
 }

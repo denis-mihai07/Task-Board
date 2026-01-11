@@ -2,9 +2,14 @@ import "./Content.css";
 import "./List.css";
 import "./Card.css";
 import { useEffect, useState, useRef } from "react";
-import { PlusIcon, TrashIcon, XIcon } from "@phosphor-icons/react";
+import {
+  CheckFatIcon,
+  PlusIcon,
+  TrashIcon,
+  XIcon,
+} from "@phosphor-icons/react";
 
-const Card = ({ listId, cardId, title, setLists }) => {
+const Card = ({ listId, cardId, title, completed, setLists }) => {
   const cardInput = useRef(null);
 
   useEffect(() => {
@@ -12,7 +17,30 @@ const Card = ({ listId, cardId, title, setLists }) => {
   }, [title]);
 
   return (
-    <div className="card_container">
+    <div className={`card_container ${completed ? "completed" : ""}`}>
+      <div className="check_container">
+        <div
+          className={`check`}
+          onClick={() => {
+            setLists((prev) =>
+              prev.map((list) =>
+                list.listId != listId
+                  ? list
+                  : {
+                      ...list,
+                      cards: list.cards.map((card) =>
+                        card.cardId != cardId
+                          ? card
+                          : { ...card, completed: !card.completed }
+                      ),
+                    }
+              )
+            );
+          }}
+        >
+          {completed ? <CheckFatIcon size={10} weight="fill" /> : ""}
+        </div>
+      </div>
       <div
         ref={cardInput}
         contentEditable={true}
@@ -39,18 +67,41 @@ const Card = ({ listId, cardId, title, setLists }) => {
               )
             );
           } else {
-            // setLists((prev) =>
-            //   prev.map((val) =>
-            //     val.listId == cardId ? { ...val, title: "Untitled Card" } : val
-            //   )
-            // );
-            // e.currentTarget.innerText = "Untitled Card";
+            setLists((prev) =>
+              prev.map((list) =>
+                list.listId != listId
+                  ? list
+                  : {
+                      ...list,
+                      cards: list.cards.filter((card) => card.cardId != cardId),
+                    }
+              )
+            );
+            e.currentTarget.innerText = "Untitled Card";
           }
         }}
         onKeyDown={(e) => {
           if (e.key == "Enter") {
             e.preventDefault();
             e.currentTarget.blur();
+          }
+        }}
+        onClick={() => {
+          if (completed) {
+            setLists((prev) =>
+              prev.map((list) =>
+                list.listId != listId
+                  ? list
+                  : {
+                      ...list,
+                      cards: list.cards.map((card) =>
+                        card.cardId != cardId
+                          ? card
+                          : { ...card, completed: !card.completed }
+                      ),
+                    }
+              )
+            );
           }
         }}
       ></div>
@@ -137,6 +188,7 @@ const List = ({ listId, title, cards, setLists }) => {
             cardId={val.cardId}
             listId={listId}
             title={val.text}
+            completed={val.completed}
             setLists={setLists}
           />
         ))}
@@ -152,8 +204,8 @@ const List = ({ listId, title, cards, setLists }) => {
                       ...cards,
                       {
                         cardId: "c" + Date.now(),
-                        text: "Default Card",
-                        position: cards.length,
+                        text: "Untitled Card",
+                        position: cards.length + 1,
                         completed: false,
                       },
                     ],
@@ -201,6 +253,10 @@ const Content = () => {
 
   useEffect(() => {
     if (lists == null) return;
+
+    for (let i = 0; i < lists.length; i++) {
+      if (i == 2) console.log(lists[i]);
+    }
 
     const saveListsToCloud = async () => {
       try {
@@ -254,7 +310,7 @@ const Content = () => {
             ...prev,
             {
               listId: "l" + Date.now(),
-              title: "Default List",
+              title: "Untitled List",
               position: prev.length + 1,
               cards: [],
             },

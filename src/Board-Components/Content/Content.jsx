@@ -2,7 +2,7 @@ import "./Content.css";
 import "./List.css";
 import "./Card.css";
 import { useEffect, useState, useRef } from "react";
-import { PlusIcon } from "@phosphor-icons/react";
+import { PlusIcon, TrashIcon, XIcon } from "@phosphor-icons/react";
 
 const Card = ({ listId, cardId, title, setLists }) => {
   const cardInput = useRef(null);
@@ -54,6 +54,23 @@ const Card = ({ listId, cardId, title, setLists }) => {
           }
         }}
       ></div>
+      <div
+        className="card_buttons"
+        onClick={() => {
+          setLists((prev) =>
+            prev.map((list) =>
+              list.listId == listId
+                ? {
+                    ...list,
+                    cards: list.cards.filter((card) => card.cardId != cardId),
+                  }
+                : list
+            )
+          );
+        }}
+      >
+        <TrashIcon size={15} />
+      </div>
     </div>
   );
 };
@@ -67,38 +84,51 @@ const List = ({ listId, title, cards, setLists }) => {
 
   return (
     <div className="list_container">
-      <div
-        ref={listInput}
-        contentEditable={true}
-        spellCheck={false}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-        className="list_title"
-        onBlur={(e) => {
-          const newName = e.currentTarget.innerText.trim();
-          if (newName) {
-            setLists((prev) =>
-              prev.map((val) =>
-                val.listId == listId ? { ...val, title: newName } : val
-              )
-            );
-          } else {
-            setLists((prev) =>
-              prev.map((val) =>
-                val.listId == listId ? { ...val, title: "Untitled List" } : val
-              )
-            );
-            e.currentTarget.innerText = "Untitled List";
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key == "Enter") {
-            e.preventDefault();
-            e.currentTarget.blur();
-          }
-        }}
-      ></div>
+      <div className="list_header">
+        <div
+          ref={listInput}
+          contentEditable={true}
+          spellCheck={false}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          className="list_title"
+          onBlur={(e) => {
+            const newName = e.currentTarget.innerText.trim();
+            if (newName) {
+              setLists((prev) =>
+                prev.map((val) =>
+                  val.listId == listId ? { ...val, title: newName } : val
+                )
+              );
+            } else {
+              setLists((prev) =>
+                prev.map((val) =>
+                  val.listId == listId
+                    ? { ...val, title: "Untitled List" }
+                    : val
+                )
+              );
+              e.currentTarget.innerText = "Untitled List";
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key == "Enter") {
+              e.preventDefault();
+              e.currentTarget.blur();
+            }
+          }}
+        ></div>
+        <div
+          className="list_header_buttons"
+          onClick={() => {
+            setLists((prev) => prev.filter((list) => list.listId != listId));
+          }}
+        >
+          <XIcon size={16} />
+        </div>
+      </div>
+
       {cards
         .sort((a, b) => a.position - b.position)
         .map((val) => (
@@ -119,54 +149,28 @@ const List = ({ listId, title, cards, setLists }) => {
 };
 
 const Content = () => {
-  const [lists, setLists] = useState([
-    {
-      listId: "l1",
-      title: "Denis's List",
-      position: 1,
-      cards: [
-        {
-          cardId: "c1",
-          text: "cardul meu",
-          position: 2,
-          completed: false,
-        },
-      ],
-    },
-    {
-      listId: "l2",
-      title: "Mihai's List",
-      position: 2,
-      cards: [
-        {
-          cardId: "c1",
-          text: "pizda",
-          position: 0,
-          completed: false,
-        },
-        {
-          cardId: "c2",
-          text: "pula",
-          position: 0,
-          completed: true,
-        },
-        {
-          cardId: "c3",
-          text: "cacat",
-          position: 0,
-          completed: false,
-        },
-      ],
-    },
-  ]);
+  const [lists, setLists] = useState([]);
 
   useEffect(() => {
     // GET lists
+    const fetchLists = async () => {
+      const res = await fetch(
+        "https://api.jsonbin.io/v3/b/6963422443b1c97be9282fc0",
+        {
+          headers: {
+            "X-Master-Key":
+              "$2a$10$78y7ZQr33DNSO7Mycug1reYn4Utz7J2Fh4mCCQpGv2bF8w6acJ1G6",
+          },
+        }
+      );
+      const data = await res.json();
+      setLists(data.record);
+    };
+
+    fetchLists();
   }, []);
 
-  useEffect(() => {
-    console.log(lists.map((val) => val.cards.map((val) => val.text)));
-  }, [lists]);
+  useEffect(() => {}, [lists]);
 
   const handleAddList = () => {};
 

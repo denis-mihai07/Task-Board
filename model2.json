@@ -1,0 +1,40 @@
+[
+  {
+    "listId": "l1",
+    "title": "Denis's List",
+    "position": 1,
+    "cards": [
+      {
+        "cardId": "c1",
+        "text": "cardul meu",
+        "position": 2,
+        "completed": false
+      }
+    ]
+  },
+  {
+    "listId": "l2",
+    "title": "Mihai's List",
+    "position": 2,
+    "cards": [
+      {
+        "cardId": "c1",
+        "text": "pizda",
+        "position": 0,
+        "completed": false
+      },
+      {
+        "cardId": "c2",
+        "text": "pula",
+        "position": 0,
+        "completed": true
+      },
+      {
+        "cardId": "c3",
+        "text": "cacat",
+        "position": 0,
+        "completed": false
+      }
+    ]
+  }
+]

@@ -3,7 +3,7 @@
   width: 20rem;
   margin: 0 1rem;
   height: fit-content;
-  background-color: white;
+  background-color: rgb(238, 238, 238);
   padding: 1rem;
   border-radius: 1rem;
   display: flex;
@@ -12,19 +12,41 @@
   flex-direction: column;
 }
 
+.list_header {
+  height: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.list_header_buttons {
+  height: 1.5rem;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.list_header_buttons:hover {
+  background-color: rgb(214, 214, 214);
+}
+
 .list_title {
-  height: 1.5rem !important;
   width: auto;
+  max-width: 90%;
   display: flex;
   justify-content: start;
   align-items: center;
   cursor: pointer;
   border-radius: 0.5rem;
   user-select: none;
-  padding: 1rem;
+  padding: 0.5rem;
   color: rgb(0, 0, 0);
-  background-color: white;
-  margin-bottom: 0.3rem;
+  background-color: rgb(238, 238, 238);
 }
 
 .list_title:hover {

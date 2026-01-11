@@ -1,5 +1,6 @@
 :root {
   --banner-color: #0000006b;
+  --header-color: #0000002c;
 }
 
 *,
@@ -61,15 +62,16 @@ a {
 
 ::-webkit-scrollbar {
   width: 0.4rem;
+  height: 0.5rem;
 }
 
 ::-webkit-scrollbar-track {
-  background: #d8d8d8;
+  background: #eeeeee71;
+  padding: 1rem;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #949394;
-  border-radius: 5%;
+  background: #ffffffc5;
+  border-radius: 5rem;
 }
 
 /* ::-webkit-scrollbar {

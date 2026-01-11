@@ -1,0 +1,42 @@
+.content_container {
+  height: calc(100vh - 7rem);
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  padding: 0.7rem;
+}
+
+.content_container div {
+  flex-shrink: 0;
+}
+
+.createList_container {
+  height: 3rem;
+  width: 20rem;
+  margin: 0 1rem;
+  background-color: rgba(0, 0, 0, 0.548);
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.createList_container:hover {
+  background-color: rgba(0, 0, 0, 0.719);
+}
+
+.createList_container svg {
+  fill: white;
+  transform: scale(1.2);
+  margin: 0 0.5rem;
+}
+
+.createList_title {
+  color: white;
+  font-family: "Mozilla Text";
+  font-size: 1rem;
+}

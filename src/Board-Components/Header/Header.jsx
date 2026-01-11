@@ -9,10 +9,20 @@ import {
   SpinnerIcon,
 } from "@phosphor-icons/react";
 import Picture from "./default_picture.jpg";
+import ColorThief from "colorthief";
+import { hexToRGB, getAverageRGB } from "../../utils";
+
+const getContrastColor = (rgbArray) => {
+  if (!rgbArray) return "white";
+  // Readable Brightness formula
+  const brightness =
+    (rgbArray[0] * 299 + rgbArray[1] * 587 + rgbArray[2] * 114) / 1000;
+  return brightness > 239 ? "black" : "white";
+};
 
 const unsplashFetchURL =
   "https://api.unsplash.com/photos/random?count=30&orientation=landscape&query=wallpaper,landscape,background&client_id=OHIYPwO7PbAph1p5sa6rM3E1hK5LmG-I8IugGOMU-O0";
-const Banner = ({ setBackground }) => {
+const Banner = ({ setBackground, setHeaderColor }) => {
   const [searchValue, setSearchValue] = useState("");
 
   const [bgMenu, setBgMenu] = useState("");
@@ -34,6 +44,7 @@ const Banner = ({ setBackground }) => {
     "to right, #870000, #190a05",
     "to right, #00d2ff, #3a7bd5",
     "to right, #f2709c, #ff9472",
+    "to right, #ddd6f3, #faaca8",
   ]);
   const [cooldown, setCooldown] = useState(false);
 
@@ -56,10 +67,15 @@ const Banner = ({ setBackground }) => {
     setCooldown(true);
     setTimeout(() => {
       setCooldown(false);
-    }, 2100);
+    }, 500);
     const img = new Image();
     img.src = src;
+    img.crossOrigin = "Anonymous";
     img.onload = () => {
+      const colorThief = new ColorThief();
+      const color = colorThief.getColor(img);
+      setHeaderColor(color);
+
       setBackground(src);
       setIsLoading(false);
     };
@@ -195,6 +211,7 @@ const Banner = ({ setBackground }) => {
                       onClick={() => {
                         if (!cooldown) {
                           handleChangeBackground(val.urls.full);
+                          console.log(val.urls.full);
                           setSelectedID(val.id);
                         }
                       }}
@@ -221,6 +238,15 @@ const Banner = ({ setBackground }) => {
                       onClick={() => {
                         if (!cooldown) {
                           setBackground(val);
+                          const template = /#(\w{6})/g;
+                          const gradientColors = val.match(template);
+                          const color1 = hexToRGB(gradientColors[0]);
+                          const color2 = hexToRGB(gradientColors[1]);
+
+                          const average = getAverageRGB(color1, color2);
+
+                          // console.log(average);
+                          setHeaderColor(average);
                           setSelectedID(id);
                         }
                       }}
@@ -238,10 +264,54 @@ const Banner = ({ setBackground }) => {
   );
 };
 
-const Header = ({ setBackground }) => {
+const Header = ({ setBackground, boardName, setBoardName }) => {
+  const [headerColor, setHeaderColor] = useState(null);
+  const titleInputRef = useRef(null);
+
+  useEffect(() => {
+    titleInputRef.current.innerText = boardName;
+  }, []);
+
   return (
     <>
-      <Banner setBackground={setBackground} />
+      <Banner setBackground={setBackground} setHeaderColor={setHeaderColor} />
+      <div
+        className="header_container"
+        style={{
+          backgroundColor: headerColor
+            ? `rgba(${headerColor[0]}, ${headerColor[1]}, ${headerColor[2]}, 0.4)`
+            : "",
+        }}
+      >
+        <div className="header_left">
+          <div
+            ref={titleInputRef}
+            contentEditable="true"
+            onBlur={(e) => {
+              const newName = e.currentTarget.innerText.trim();
+              if (newName) setBoardName(newName);
+              else {
+                setBoardName("Untitled Board");
+                e.currentTarget.innerText = "Untitled Board";
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key == "Enter") {
+                e.preventDefault();
+                e.currentTarget.blur();
+              }
+            }}
+            spellCheck={false}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            className="header_title"
+            data-gram="false" // to block browser extensions
+            // style={{ color: getContrastColor(headerColor) }}
+          ></div>
+        </div>
+        <div className="header_right"></div>
+      </div>
     </>
   );
 };

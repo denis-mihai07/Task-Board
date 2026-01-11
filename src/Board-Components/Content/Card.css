@@ -1,0 +1,22 @@
+.card_container {
+  height: 2rem;
+  width: 100%;
+  margin: 0.2rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.card_title {
+  height: 1rem !important;
+  width: auto;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  user-select: none;
+  padding: 1rem;
+  color: rgb(0, 0, 0);
+  background-color: white;
+  margin-bottom: 0.3rem;
+}

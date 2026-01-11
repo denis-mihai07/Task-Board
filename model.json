@@ -1,0 +1,26 @@
+{
+  "user": "Denis Mihai",
+  "email": "denis@mihai.com",
+  "boards": [
+    {
+      "boardId": "b1",
+      "boardName": "Default Board",
+      "background_url": "https://unsplash...",
+      "lists": [
+        {
+          "listId": "l1",
+          "title": "Default List",
+          "position": 0,
+          "cards": [
+            {
+              "CardId": "c1",
+              "text": "Default Card",
+              "position": 0,
+              "completed": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

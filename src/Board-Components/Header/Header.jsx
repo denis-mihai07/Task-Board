@@ -245,7 +245,6 @@ const Banner = ({ setBackground, setHeaderColor }) => {
 
                           const average = getAverageRGB(color1, color2);
 
-                          // console.log(average);
                           setHeaderColor(average);
                           setSelectedID(id);
                         }
@@ -270,7 +269,7 @@ const Header = ({ setBackground, boardName, setBoardName }) => {
 
   useEffect(() => {
     titleInputRef.current.innerText = boardName;
-  }, []);
+  }, [boardName]);
 
   return (
     <>

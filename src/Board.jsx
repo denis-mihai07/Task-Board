@@ -4,16 +4,66 @@ import Background from "./Board-Components/Background/Background.jsx";
 import Content from "./Board-Components/Content/Content.jsx";
 
 const Board = () => {
-  const [bgUrl, setBgUrl] = useState(
-    "https://images.unsplash.com/photo-1475070929565-c985b496cb9f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTM1NTN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc5Mjg2OTh8&ixlib=rb-4.1.0&q=85"
-  );
+  const [bgUrl, setBgUrl] = useState(null);
 
-  const [boardName, setBoardName] = useState("Denis's Board");
+  const [boardName, setBoardName] = useState(null);
+
+  useEffect(() => {
+    const fetchBoard = async () => {
+      try {
+        const res = await fetch(
+          "https://api.jsonbin.io/v3/b/6963522bd0ea881f406396af",
+          {
+            headers: {
+              "X-Master-Key":
+                "$2a$10$78y7ZQr33DNSO7Mycug1reYn4Utz7J2Fh4mCCQpGv2bF8w6acJ1G6",
+            },
+          }
+        );
+        const data = (await res.json()).record;
+
+        setBgUrl(data.background_url);
+        setBoardName(data.boardName);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchBoard();
+  }, []);
 
   useEffect(() => {
     // console.log(boardName);
     // POST la DB cu BoardName
-  }, [boardName]);
+    if (!boardName || !bgUrl) return;
+    const saveBoard = async () => {
+      try {
+        const res = await fetch(
+          "https://api.jsonbin.io/v3/b/6963522bd0ea881f406396af",
+          {
+            method: "PUT",
+            headers: {
+              "Access-Control-Allow-Origin": "anonymous",
+              "Content-Type": "application/json",
+              "X-Master-Key":
+                "$2a$10$78y7ZQr33DNSO7Mycug1reYn4Utz7J2Fh4mCCQpGv2bF8w6acJ1G6",
+            },
+            body: JSON.stringify({
+              boardName: boardName,
+              background_url: bgUrl,
+            }),
+          }
+        );
+        if (res.ok) {
+          console.log("/PUT BOARD: ", res.status);
+        }
+      } catch (err) {
+        console.error("/PUT BOARD ERROR: ", err);
+      }
+    };
+
+    saveBoard();
+  }, [boardName, bgUrl]);
 
   return (
     <>
@@ -21,6 +71,7 @@ const Board = () => {
         setBackground={setBgUrl}
         boardName={boardName}
         setBoardName={setBoardName}
+        setBgUrl={setBgUrl}
       />
       <Background bgUrl={bgUrl} />
       <Content />

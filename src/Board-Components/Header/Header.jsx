@@ -137,6 +137,10 @@ const Banner = ({ setBackground, setHeaderColor }) => {
               className={`bgMenu_container ${
                 bgMenu == "Pictures" || bgMenu == "Colors" ? "big" : ""
               }`}
+              onBlur={() => {
+                setBgMenu("");
+              }}
+              tabIndex="-1"
             >
               <div className="bgMenu_header">
                 {bgMenu != "Home" && (

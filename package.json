@@ -1,6 +1,6 @@
 {
   "name": "task-board",
-  "homepage": "https://taskboard.birtalandenis.com",
+  "homepage": "http://taskboard.birtalandenis.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",

@@ -38,15 +38,22 @@
 .list_title {
   width: auto;
   max-width: 90%;
-  display: flex;
-  justify-content: start;
-  align-items: center;
+  display: inline-block;
   cursor: pointer;
   border-radius: 0.5rem;
   user-select: none;
   padding: 0.5rem;
   color: rgb(0, 0, 0);
   background-color: rgb(238, 238, 238);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  scrollbar-width: none;
+}
+
+.list_title:focus {
+  overflow-x: auto;
+  text-overflow: clip;
 }
 
 .list_title:hover {

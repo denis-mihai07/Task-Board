@@ -3,7 +3,22 @@
     {
       "boardId": "b1",
       "boardName": "Default Board",
-      "background_url": "https://unsplash..."
+      "background_url": "https://unsplash...",
+      "lists": [
+        {
+          "listId": "l1",
+          "title": "Denis's List",
+          "position": 1,
+          "cards": [
+            {
+              "cardId": "c1",
+              "text": "cardul meu",
+              "position": 2,
+              "completed": false
+            }
+          ]
+        }
+      ]
     }
   ]
 }

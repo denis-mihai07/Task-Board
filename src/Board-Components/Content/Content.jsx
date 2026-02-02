@@ -18,26 +18,26 @@ const Card = ({ listId, cardId, title, completed, setLists }) => {
 
   return (
     <div className={`card_container ${completed ? "completed" : ""}`}>
-      <div className="check_container">
-        <div
-          className={`check`}
-          onClick={() => {
-            setLists((prev) =>
-              prev.map((list) =>
-                list.listId != listId
-                  ? list
-                  : {
-                      ...list,
-                      cards: list.cards.map((card) =>
-                        card.cardId != cardId
-                          ? card
-                          : { ...card, completed: !card.completed }
-                      ),
-                    }
-              )
-            );
-          }}
-        >
+      <div
+        className="check_container"
+        onClick={() => {
+          setLists((prev) =>
+            prev.map((list) =>
+              list.listId != listId
+                ? list
+                : {
+                    ...list,
+                    cards: list.cards.map((card) =>
+                      card.cardId != cardId
+                        ? card
+                        : { ...card, completed: !card.completed }
+                    ),
+                  }
+            )
+          );
+        }}
+      >
+        <div className={`check`}>
           {completed ? <CheckFatIcon size={10} weight="fill" /> : ""}
         </div>
       </div>
@@ -50,6 +50,7 @@ const Card = ({ listId, cardId, title, completed, setLists }) => {
         autoCapitalize="off"
         className="card_title"
         onBlur={(e) => {
+          e.target.scrollLeft = 0;
           const newName = e.currentTarget.innerText.trim();
           if (newName) {
             setLists((prev) =>
@@ -145,6 +146,7 @@ const List = ({ listId, title, cards, setLists }) => {
           autoCapitalize="off"
           className="list_title"
           onBlur={(e) => {
+            e.target.scrollLeft = 0;
             const newName = e.currentTarget.innerText.trim();
             if (newName) {
               setLists((prev) =>
@@ -253,10 +255,6 @@ const Content = () => {
 
   useEffect(() => {
     if (lists == null) return;
-
-    for (let i = 0; i < lists.length; i++) {
-      if (i == 2) console.log(lists[i]);
-    }
 
     const saveListsToCloud = async () => {
       try {

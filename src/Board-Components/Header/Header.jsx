@@ -291,6 +291,7 @@ const Header = ({ setBackground, boardName, setBoardName }) => {
             ref={titleInputRef}
             contentEditable="true"
             onBlur={(e) => {
+              e.target.scrollLeft = 0;
               const newName = e.currentTarget.innerText.trim();
               if (newName) setBoardName(newName);
               else {

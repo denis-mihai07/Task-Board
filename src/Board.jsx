@@ -3,27 +3,32 @@ import Header from "./Board-Components/Header/Header.jsx";
 import Background from "./Board-Components/Background/Background.jsx";
 import Content from "./Board-Components/Content/Content.jsx";
 
+const JWT_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJleGVtcGx1QGRpY2suY29tIiwiZXhwIjoxNzY5OTc4NTM1fQ.e6mr8dKkWruzh1yT5rh1vQ0Oq0g3g9qX6gntSS_Upuk";
+
 const Board = () => {
   const [bgUrl, setBgUrl] = useState(null);
 
   const [boardName, setBoardName] = useState(null);
 
   useEffect(() => {
+    console.log("/GET BOARD");
     const fetchBoard = async () => {
       try {
         const res = await fetch(
-          "https://api.jsonbin.io/v3/b/6963522bd0ea881f406396af",
+          "https://api-taskboard.birtalandenis.com/boards/2/full",
           {
             headers: {
-              "X-Master-Key":
-                "$2a$10$78y7ZQr33DNSO7Mycug1reYn4Utz7J2Fh4mCCQpGv2bF8w6acJ1G6",
+              Accept: "application/json",
+              Authorization: `Bearer ${JWT_TOKEN}`,
             },
           }
         );
-        const data = (await res.json()).record;
+        const data = await res.json();
+        console.log(data);
 
         setBgUrl(data.background_url);
-        setBoardName(data.boardName);
+        setBoardName(data.board_title);
       } catch (err) {
         console.error(err);
       }

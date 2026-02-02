@@ -308,28 +308,34 @@
 .header_left {
   height: 100%;
   width: auto;
-  max-width: 30rem;
+  max-width: 20rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 2px solid red; */
 }
 
 .header_title {
   height: 70%;
-  width: 100%;
+  width: auto;
   min-width: 2rem;
   /* background-color: #0000000c; */
   border-radius: 0.5rem;
-  display: flex;
-  justify-content: start;
-  align-items: center;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   user-select: none;
   cursor: pointer;
   border: none;
   padding: 0.5rem;
   color: white;
   text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3), 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header_title:focus {
+  overflow-x: auto;
+  scrollbar-width: none;
+  text-overflow: clip;
 }
 
 .header_title:hover {
